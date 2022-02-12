@@ -35,7 +35,7 @@ if __name__ == '__main__':
         rate = rospy.Rate(10)
 
         setPosPub = rospy.Publisher('/gazebo/set_model_state', ModelState, queue_size=10)
-        velPub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
+        velPub = rospy.Publisher('/raspi_0/cmd_vel', Twist, queue_size=10)
 
         ''''
         #Plot feedback control graph
@@ -55,16 +55,15 @@ if __name__ == '__main__':
         sleep(1)
 
         while not rospy.is_shutdown():
-            odomMsg = rospy.wait_for_message('/odom', Odometry)
+            odomMsg = rospy.wait_for_message('/raspi_0/odom', Odometry)
             if not robot_in_pos:
                 robotStop(velPub)
                 (x_init, y_init, theta_init) = robotSetRandomPos(setPosPub)
                 
                 #check
-                odomMsg = rospy.wait_for_message('/odom', Odometry)
+                odomMsg = rospy.wait_for_message('/raspi_0/odom', Odometry)
                 (x, y) = getPosition(odomMsg)
                 theta = degrees(getRotation(odomMsg))
-                print(theta, theta_init)
                 if abs(x-x_init) < 0.05 and abs(y-y_init) < 0.05 and abs(theta - theta_init) < 2:
                     robot_in_pos = True
                     print('\r\nInitial position:')
@@ -86,9 +85,8 @@ if __name__ == '__main__':
                 Y_goal = np.append(Y_goal, Y_GOAL)
                 THETA_goal = np.append(THETA_goal, THETA_GOAL)
 
-
-                status = robotFeedbackControl(velPub, x, y, theta, X_GOAL, Y_GOAL, radians(THETA_GOAL))
-                if status == 'Goal Position reached':
+                status = robotFeedbackControl_without_beta(velPub, x, y, theta, X_GOAL, Y_GOAL)
+                if status == 'True':
                     robotStop(velPub)
 
                     '''

@@ -39,6 +39,7 @@ def plot_feedback_control(log_file_1, log_file_2, log_file_3):
     plt.figure(1)
     plot_label = r'$k_\rho$ = %.2f $k_\alpha$ = %.2f $k_\beta$ = %.2f' % (k_rho_1, k_alpha_1, k_beta_1)
     plt.plot(x_traj_1, y_traj_1, label = plot_label)
+    print (x_traj_1)
     plot_label = r'$k_\rho$ = %.2f $k_\alpha$ = %.2f $k_\beta$ = %.2f' % (k_rho_2, k_alpha_2, k_beta_2)
     plt.plot(x_traj_2, y_traj_2, label = plot_label)
     plot_label = r'$k_\rho$ = %.2f $k_\alpha$ = %.2f $k_\beta$ = %.2f' % (k_rho_3, k_alpha_3, k_beta_3)
